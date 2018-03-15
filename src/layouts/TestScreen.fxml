@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TestScreenController">
+    <GridPane layoutX="-14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="60" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+        <VBox prefHeight="720.0" prefWidth="405.0">
+            <AnchorPane prefHeight="736.0" prefWidth="512.0">
+                <HBox layoutX="14.0" layoutY="550.0" prefHeight="170.0" prefWidth="512.0">
+                    <Label fx:id="questionsCounter" prefHeight="22.0" prefWidth="32.0" text="5/10" />
+                    <Label fx:id="timer" text="5 sec" visible="false"/>
+                </HBox>
+                <ImageView fitHeight="170.0" fitWidth="121.0" layoutX="41.0" layoutY="82.0" pickOnBounds="true" preserveRatio="true" />
+                <Label fx:id="textOfQuestion" layoutX="183.0" layoutY="22.0" prefHeight="279.0" prefWidth="326.0" text="Кто выиграл войну в 1812?" />
+                <VBox fx:id="answerBlock" layoutX="246.0" layoutY="301.0" prefHeight="200.0" prefWidth="262.0">
+                    <Label fx:id="yourAnswerLabel" prefHeight="63.0" prefWidth="262.0" text="Ваш ответ: Россия" />
+                    <Label fx:id="rightAnswerLabel" prefHeight="58.0" prefWidth="262.0" text="Правильный ответ: Помидоры" />
+                </VBox>
+                <HBox fx:id="boxWithAnswer" layoutX="247.0" layoutY="301.0" prefHeight="25.0" prefWidth="262.0">
+                    <TextField fx:id="answerField" prefHeight="25.0" prefWidth="262.0" text="Ответ на вопрос" />
+                    <Button fx:id="answerApplyButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="168.0" text="Ответить" />
+                </HBox>
+                <VBox fx:id="answersButtons" layoutX="246.0" layoutY="301.0" prefHeight="200.0" prefWidth="262.0" />
+            </AnchorPane>
+        </VBox>
+        <WebView fx:id="webBrowser" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+            <GridPane.margin>
+                <Insets left="20.0" />
+            </GridPane.margin>
+        </WebView>
+    </GridPane>
+</AnchorPane>
