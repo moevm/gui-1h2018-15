@@ -1,27 +1,25 @@
+import controllers.FxmlNamesOfController
+import controllers.MainMenuController
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.stage.Stage
-import controllers.TestScreenController
-import logic.TestAndQuestionsDB
+import logic.LessonsDB
+
+fun main(args: Array<String>) {
+    Application.launch(Main::class.java)
+}
 
 class Main : Application() {
 
     override fun start(primaryStage: Stage?) {
         primaryStage?.title = "Googlr"
-        val loader = FXMLLoader(javaClass.getResource("layouts/TestScreen.fxml"))
+        val loader = FXMLLoader(javaClass.getResource("layouts/${FxmlNamesOfController.getFxmlNameForController(MainMenuController::class.java)}"))
         val scene = Scene(loader.load())
         primaryStage?.scene = scene
         primaryStage?.show()
-        loader.getController<TestScreenController>().bindTestAndStart(TestAndQuestionsDB.getTest())
+        loader.getController<MainMenuController>().bindModel(LessonsDB.getAllLessons())
 
-    }
-
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            launch(Main::class.java)
-        }
     }
 
 }

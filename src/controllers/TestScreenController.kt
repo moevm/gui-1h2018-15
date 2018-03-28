@@ -4,22 +4,19 @@ import javafx.animation.KeyFrame
 import javafx.animation.Timeline
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
-import javafx.collections.ObservableList
 import javafx.event.EventHandler
 import javafx.fxml.FXML
-import javafx.scene.control.*
+import javafx.scene.control.Button
+import javafx.scene.control.Label
+import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
-import javafx.scene.web.WebView
-import models.Test
-import javafx.fxml.FXMLLoader
-import javafx.scene.Node
 import javafx.scene.layout.VBox
-import javafx.util.Callback
+import javafx.scene.web.WebView
 import javafx.util.Duration
+import logic.LessonsDB
+import models.Lesson
 
-class TestScreenController {
-
-    private lateinit var test: Test
+class TestScreenController : BaseController<Lesson>() {
 
     companion object {
         private const val TIME_FOR_QUESTION = 10
@@ -43,12 +40,11 @@ class TestScreenController {
     @FXML
     private lateinit var answerApplyButton: Button
     @FXML
-    private lateinit var answerBlock: Node
+    private lateinit var answerBlock: VBox
     @FXML
     private lateinit var yourAnswerLabel: Label
     @FXML
     private lateinit var rightAnswerLabel: Label
-
 
     private var questionNumber = 0
     private var rightAnswers = 0
@@ -73,15 +69,17 @@ class TestScreenController {
         })
     }
 
-    fun bindTestAndStart(test: Test) {
+    override fun bindModel(model: Lesson) {
+        super.bindModel(model)
         questionNumber = 0
         rightAnswers = 0
-        this.test = test
         cleanAll()
         playTimer(1, true, {
             bindNextQuestion()
         })
     }
+
+    override fun getTitle(): String = "Тестирование"
 
     private fun updateWebView() {
         webBrowser.engine.load("https://www.google.ru/")
@@ -94,8 +92,8 @@ class TestScreenController {
                 timer.text = "${--counter} секунд"
             }
             if (counter == 0) {
-                onFinishedAction()
                 currentTimeline?.stop()
+                onFinishedAction()
             }
 
         })).apply {
@@ -106,23 +104,24 @@ class TestScreenController {
 
     private fun stopTimer(byUser: Boolean, answer: String? = null) {
         answerApplyButton.isDisable = true
+        val answerIsRight = answer == model.test.questions[questionNumber].rightAnswer
 
         answerBlock.isVisible = true
         answersButtons.isVisible = false
         boxWithAnswer.isVisible = false
 
-        rightAnswerLabel.text = "Правильный ответ: ${test.questions[questionNumber].rightAnswer}"
+        rightAnswerLabel.text = "${if (answerIsRight) "П" else "Неп"}равильно"
         yourAnswerLabel.text = "Ваш ответ: ${if (byUser) answer else "-"}"
 
         if (byUser) {
             currentTimeline?.stop()
-            rightAnswers += if (answer == test.questions[questionNumber].rightAnswer) 1 else 0
+            rightAnswers += if (answerIsRight) 1 else 0
         }
 
         questionNumber++
 
         playTimer(TIME_FOR_RELAX, true, {
-            if (questionNumber == test.questions.size) {
+            if (questionNumber == model.test.questions.size) {
                 endScreen()
             } else {
                 bindNextQuestion()
@@ -137,13 +136,20 @@ class TestScreenController {
     }
 
     private fun endScreen() {
-        rightAnswerLabel.text = "Вы${if (rightAnswers < test.minimum) " не " else ""}прошли минимальный порог в ${test.minimum} баллов"
-        yourAnswerLabel.text = "Итог: $rightAnswers/${test.questions.size}"
+        rightAnswerLabel.text = "Вы${if (rightAnswers < model.test.minimum) " не " else ""}прошли минимальный порог в ${model.test.minimum} баллов"
+        yourAnswerLabel.text = "Итог: $rightAnswers/${model.test.questions.size}"
+        LessonsDB.setResultToLesson(model.name, rightAnswers)
+        answerBlock.children.add(Button().apply {
+            text = "Перейти в меню"
+            setOnMouseClicked {
+                closeWindowAndOpenNew<List<Lesson>, MainMenuController>(model = LessonsDB.getAllLessons(), childNode = answerBlock)
+            }
+        })
         textOfQuestion.isVisible = false
     }
 
     private fun bindNextQuestion() {
-        val question = test.questions[questionNumber]
+        val question = model.test.questions[questionNumber]
         clearAnswerFields()
         textOfQuestion.text = question.textOfQuestion
         boxWithAnswer.isVisible = !question.hasVariants
@@ -153,11 +159,10 @@ class TestScreenController {
             observableList.setAll(question.variants.orEmpty().plus(question.rightAnswer).shuffled())
         }
         updateWebView()
-        questionsCounter.text = "${questionNumber + 1}/${test.questions.size}"
+        questionsCounter.text = "${questionNumber + 1}/${model.test.questions.size}"
         playTimer(TIME_FOR_QUESTION, true, {
             stopTimer(false)
         })
-
 
     }
 

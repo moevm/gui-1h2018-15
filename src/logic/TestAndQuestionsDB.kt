@@ -4,7 +4,7 @@ import models.Question
 import models.Test
 
 object TestAndQuestionsDB {
-    public fun getTest(): Test = Test(listOf(
+    fun getTest(): Test = Test(listOf(
             Question(textOfQuestion = "Заклинание боли в Гарри Поттере?", hasVariants = true, variants = listOf("Вингардиум левиОсса", "Вингардиум левиоссА", "ТолькоСиплюсПлюсус"), rightAnswer = "Круциатус"),
             Question(textOfQuestion = "Как звали дворецкого Тони Старка?", hasVariants = true, variants = listOf("Альтрон", "Иван", "Стивен Роджерс"), rightAnswer = "Джарвис"),
             Question(textOfQuestion = "Как расшифровывается аббревиатура \"ЛЭТИ\"?", hasVariants = true, variants = listOf("Липецкий Экономический Техникум Инвестиций", "Леонард Эйлер Творец Интегралов", "Лень Это Так Интересно"), rightAnswer = "Ленинградский Электротехнический Институт"),
