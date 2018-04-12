@@ -31,7 +31,6 @@ jar {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.jfoenix:jfoenix:8.0.3'
-    compile 'com.jfoenix:jfoenix:9.0.3'
 }
 
 task wrapper(type: Wrapper) {
