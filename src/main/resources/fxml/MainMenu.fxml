@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane
+        prefHeight="450.0"
+        prefWidth="300.0"
+        xmlns="http://javafx.com/javafx/8.0.121"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="controllers.MainMenuController"
+        stylesheets="@../stylesheets/main_menu.css"
+>
+
+    <ScrollPane styleClass="scene" fx:id="scrollBar" prefHeight="450.0" prefWidth="300.0">
+        <VBox fx:id="vBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="450.0" prefWidth="300.0" />
+    </ScrollPane>
+
+</AnchorPane>

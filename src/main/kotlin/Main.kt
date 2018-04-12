@@ -14,7 +14,7 @@ class Main : Application() {
 
     override fun start(primaryStage: Stage?) {
         primaryStage?.title = "Googlr"
-        val loader = FXMLLoader(javaClass.getResource("layouts/${FxmlNamesOfController.getFxmlNameForController(MainMenuController::class.java)}"))
+        val loader = FXMLLoader(javaClass.getResource(FxmlNamesOfController.getFxmlNameForController(MainMenuController::class.java)))
         val scene = Scene(loader.load())
         primaryStage?.scene = scene
         primaryStage?.show()

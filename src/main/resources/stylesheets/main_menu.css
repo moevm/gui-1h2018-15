@@ -1,0 +1,18 @@
+.scene {
+    -fx-background-color: white;
+}
+
+.button {
+    -jfx-button-type: RAISED;
+    -fx-text-fill: white;
+    -fx-font: 18px Roboto;
+    -fx-background-color: #4285f4;
+}
+
+#lesson {
+    -fx-background-color: #0f9058;
+}
+
+#exam {
+    -fx-background-color: #db4437;
+}

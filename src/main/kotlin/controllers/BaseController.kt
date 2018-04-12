@@ -20,7 +20,7 @@ abstract class BaseController<M : Any> {
     inline fun <Model : Any, reified C : BaseController<Model>> closeWindowAndOpenNew(childNode: Node, model: Model) {
         (childNode.scene.window as Stage).close()
 
-        val loader = FXMLLoader(javaClass.classLoader.getResource("layouts/${FxmlNamesOfController.getFxmlNameForController(C::class.java)}"))
+        val loader = FXMLLoader(javaClass.classLoader.getResource(FxmlNamesOfController.getFxmlNameForController(C::class.java)))
         val stage = Stage()
         stage.initModality(Modality.APPLICATION_MODAL)
         stage.initStyle(StageStyle.DECORATED)

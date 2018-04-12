@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Googlr.iml" filepath="$PROJECT_DIR$/Googlr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Googlr.iml" filepath="$PROJECT_DIR$/.idea/Googlr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Googlr_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Googlr_main.iml" group="Googlr" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Googlr_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Googlr_test.iml" group="Googlr" />
     </modules>
   </component>
 </project>
