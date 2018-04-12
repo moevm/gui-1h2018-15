@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="Googlr_main" target="1.8" />
       <module name="Googlr_test" target="1.8" />
+      <module name="gui-1h2018-15_main" target="1.8" />
+      <module name="gui-1h2018-15_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
