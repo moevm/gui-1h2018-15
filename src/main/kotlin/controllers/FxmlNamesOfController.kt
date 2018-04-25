@@ -1,7 +1,7 @@
 package controllers
 
 object FxmlNamesOfController {
-    fun getFxmlNameForController(cls: Class<*>): String = when(cls) {
+    fun getFxmlNameForController(cls: Class<*>): String = when (cls) {
         LectureController::class.java -> "fxml/TheoryLecture.fxml"
         MainMenuController::class.java -> "fxml/MainMenu.fxml"
         TestScreenController::class.java -> "fxml/TestScreen.fxml"

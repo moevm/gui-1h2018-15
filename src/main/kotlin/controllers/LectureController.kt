@@ -6,7 +6,7 @@ import javafx.scene.web.WebView
 import models.Lecture
 import models.Lesson
 
-class LectureController: BaseController<Lecture>() {
+class LectureController : BaseController<Lecture>() {
 
     @FXML
     private lateinit var webView: WebView

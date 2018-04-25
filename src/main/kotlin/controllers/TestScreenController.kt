@@ -1,14 +1,16 @@
 package controllers
 
+import com.jfoenix.controls.JFXButton
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.event.EventHandler
 import javafx.fxml.FXML
+import javafx.geometry.Insets
 import javafx.scene.control.Button
 import javafx.scene.control.Label
-import javafx.scene.control.TextField
+import javafx.scene.control.TextArea
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import javafx.scene.web.WebView
@@ -19,8 +21,9 @@ import models.Lesson
 class TestScreenController : BaseController<Lesson>() {
 
     companion object {
-        private const val TIME_FOR_QUESTION = 10
+        private const val TIME_FOR_QUESTION = 12
         private const val TIME_FOR_RELAX = 3
+        private const val TIME_FOR_BEGIN = 3
     }
 
     @FXML
@@ -32,19 +35,17 @@ class TestScreenController : BaseController<Lesson>() {
     @FXML
     private lateinit var questionsCounter: Label
     @FXML
-    private lateinit var boxWithAnswer: HBox
+    private lateinit var textAnswerBlock: HBox
     @FXML
-    private lateinit var answersButtons: VBox
+    private lateinit var chooseAnswerButtons: VBox
     @FXML
-    private lateinit var answerField: TextField
+    private lateinit var answerField: TextArea
     @FXML
     private lateinit var answerApplyButton: Button
     @FXML
-    private lateinit var answerBlock: VBox
+    private lateinit var goToMenuButton: Button
     @FXML
-    private lateinit var yourAnswerLabel: Label
-    @FXML
-    private lateinit var rightAnswerLabel: Label
+    private lateinit var wrapUpText: Label
 
     private var questionNumber = 0
     private var rightAnswers = 0
@@ -53,15 +54,22 @@ class TestScreenController : BaseController<Lesson>() {
 
     @FXML
     private fun initialize() {
-        answerApplyButton.onAction = EventHandler {
+        answerApplyButton.setOnMouseClicked {
             stopTimer(true, answerField.text)
         }
 
+        goToMenuButton.setOnMouseClicked {
+            closeWindowAndOpenNew<List<Lesson>, MainMenuController>(model = LessonsDB.getAllLessons(), childNode = goToMenuButton)
+        }
+
         observableList.addListener(ListChangeListener {
-            answersButtons.children.clear()
-            answersButtons.children.setAll(observableList.map { answer ->
-                Button(answer).apply {
-                    onMouseClicked = EventHandler {
+            chooseAnswerButtons.children.clear()
+            chooseAnswerButtons.children.setAll(observableList.map { answer ->
+                JFXButton(answer).apply {
+                    VBox.setMargin(this, Insets(5.0))
+                    maxWidth = Double.MAX_VALUE
+                    styleClass.add("button")
+                    setOnMouseClicked {
                         stopTimer(true, answer)
                     }
                 }
@@ -74,7 +82,7 @@ class TestScreenController : BaseController<Lesson>() {
         questionNumber = 0
         rightAnswers = 0
         cleanAll()
-        playTimer(1, true, {
+        playTimer(TIME_FOR_BEGIN, true, {
             bindNextQuestion()
         })
     }
@@ -89,7 +97,7 @@ class TestScreenController : BaseController<Lesson>() {
         var counter = secs
         currentTimeline = Timeline(KeyFrame(Duration.seconds(1.0), EventHandler {
             if (changeLabel) {
-                timer.text = "${--counter} секунд"
+                timer.text = "${--counter} s"
             }
             if (counter == 0) {
                 currentTimeline?.stop()
@@ -106,12 +114,13 @@ class TestScreenController : BaseController<Lesson>() {
         answerApplyButton.isDisable = true
         val answerIsRight = answer == model.test.questions[questionNumber].rightAnswer
 
-        answerBlock.isVisible = true
-        answersButtons.isVisible = false
-        boxWithAnswer.isVisible = false
+        wrapUpText.isVisible = true
+        chooseAnswerButtons.isVisible = false
+        textAnswerBlock.isVisible = false
 
-        rightAnswerLabel.text = "${if (answerIsRight) "П" else "Неп"}равильно"
-        yourAnswerLabel.text = "Ваш ответ: ${if (byUser) answer else "-"}"
+        wrapUpText.text = "${if (answerIsRight) "П" else "Неп"}равильный ответ"
+        //todo add wrap up text color
+        wrapUpText.style = ""
 
         if (byUser) {
             currentTimeline?.stop()
@@ -132,19 +141,13 @@ class TestScreenController : BaseController<Lesson>() {
     private fun clearAnswerFields() {
         answerField.clear()
         answerApplyButton.isDisable = false
-        answerBlock.isVisible = false
+        wrapUpText.isVisible = false
     }
 
     private fun endScreen() {
-        rightAnswerLabel.text = "Вы${if (rightAnswers < model.test.minimum) " не " else ""}прошли минимальный порог в ${model.test.minimum} баллов"
-        yourAnswerLabel.text = "Итог: $rightAnswers/${model.test.questions.size}"
+        wrapUpText.text = "Вы${if (rightAnswers < model.test.minimum) " не " else " "}прошли минимальный порог в ${model.test.minimum} баллов\nИтог: $rightAnswers/${model.test.questions.size}"
         LessonsDB.setResultToLesson(model.name, rightAnswers)
-        answerBlock.children.add(Button().apply {
-            text = "Перейти в меню"
-            setOnMouseClicked {
-                closeWindowAndOpenNew<List<Lesson>, MainMenuController>(model = LessonsDB.getAllLessons(), childNode = answerBlock)
-            }
-        })
+        goToMenuButton.isVisible = true
         textOfQuestion.isVisible = false
     }
 
@@ -152,8 +155,8 @@ class TestScreenController : BaseController<Lesson>() {
         val question = model.test.questions[questionNumber]
         clearAnswerFields()
         textOfQuestion.text = question.textOfQuestion
-        boxWithAnswer.isVisible = !question.hasVariants
-        answersButtons.isVisible = question.hasVariants
+        textAnswerBlock.isVisible = !question.hasVariants
+        chooseAnswerButtons.isVisible = question.hasVariants
 
         if (question.hasVariants) {
             observableList.setAll(question.variants.orEmpty().plus(question.rightAnswer).shuffled())
@@ -167,11 +170,12 @@ class TestScreenController : BaseController<Lesson>() {
     }
 
     private fun cleanAll() {
-        answersButtons.isVisible = false
-        textOfQuestion.text = ""
-        questionsCounter.text = ""
-        answerBlock.isVisible = false
-        boxWithAnswer.isVisible = false
+        chooseAnswerButtons.isVisible = false
+        textOfQuestion.text = "Тестирование сейчас начнется!"
+        questionsCounter.text = "0/10"
+        wrapUpText.isVisible = false
+        textAnswerBlock.isVisible = false
+        goToMenuButton.isVisible = false
     }
 
 }

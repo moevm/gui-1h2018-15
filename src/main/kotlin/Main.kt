@@ -18,6 +18,7 @@ class Main : Application() {
         val scene = Scene(loader.load())
         primaryStage?.scene = scene
         primaryStage?.show()
+        LessonsDB.readFromFile()
         loader.getController<MainMenuController>().bindModel(LessonsDB.getAllLessons())
 
     }

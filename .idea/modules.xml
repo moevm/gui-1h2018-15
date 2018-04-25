@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gui-1h2018-15.iml" filepath="$PROJECT_DIR$/.idea/modules/gui-1h2018-15.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gui-1h2018-15_main.iml" filepath="$PROJECT_DIR$/.idea/modules/gui-1h2018-15_main.iml" group="gui-1h2018-15" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gui-1h2018-15_test.iml" filepath="$PROJECT_DIR$/.idea/modules/gui-1h2018-15_test.iml" group="gui-1h2018-15" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Googlr.iml" filepath="$PROJECT_DIR$/.idea/modules/Googlr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Googlr_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Googlr_main.iml" group="Googlr" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Googlr_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Googlr_test.iml" group="Googlr" />
     </modules>
   </component>
 </project>

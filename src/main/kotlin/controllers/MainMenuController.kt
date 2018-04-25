@@ -3,9 +3,7 @@ package controllers
 import com.jfoenix.controls.JFXButton
 import javafx.fxml.FXML
 import javafx.geometry.Insets
-import javafx.scene.control.Button
 import javafx.scene.control.ScrollPane
-import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import models.Lecture
 import models.Lesson
