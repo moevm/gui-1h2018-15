@@ -7,8 +7,8 @@ object TestAndQuestionsDB {
 
     fun getDemoTest() = Test(listOf(
             Question(textOfQuestion = "Сколько будет 2+2?", hasVariants = false, rightAnswer = "4"),
-            Question(textOfQuestion = "Назовите столицу России", hasVariants = true, variants = listOf("Москва", "СПБ", "Киев", "Находка", "Дедовичи"), rightAnswer = "Москва"),
-            Question(textOfQuestion = "Назовите столицу Мира", hasVariants = true, variants = listOf("Находка", "Дедовичи"), rightAnswer = "Находка")
+            Question(textOfQuestion = "Назовите столицу России", hasVariants = true, variants = listOf("СПБ", "Киев", "Находка", "Дедовичи"), rightAnswer = "Москва"),
+            Question(textOfQuestion = "Назовите столицу Мира", hasVariants = true, variants = listOf("Дедовичи"), rightAnswer = "Находка")
     ), minimum = 1)
 
     fun getTest(): Test = Test(listOf(
