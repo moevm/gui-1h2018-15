@@ -16,6 +16,8 @@ import javafx.scene.layout.VBox
 import javafx.scene.web.WebView
 import javafx.util.Duration
 import logic.LessonsDB
+import models.Exam
+import models.Lecture
 import models.Lesson
 
 class TestScreenController : BaseController<Lesson>() {
@@ -45,12 +47,15 @@ class TestScreenController : BaseController<Lesson>() {
     @FXML
     private lateinit var goToMenuButton: Button
     @FXML
+    private lateinit var goToNextLessonButton: Button
+    @FXML
     private lateinit var wrapUpText: Label
 
     private var questionNumber = 0
     private var rightAnswers = 0
     private var currentTimeline: Timeline? = null
     private var observableList = FXCollections.observableArrayList<String>()
+    private var nextLesson: Lesson? = null
 
     @FXML
     private fun initialize() {
@@ -85,6 +90,18 @@ class TestScreenController : BaseController<Lesson>() {
         playTimer(TIME_FOR_BEGIN, true, {
             bindNextQuestion()
         })
+
+        nextLesson = LessonsDB.getNextLesson(model)
+        nextLesson?.let { lesson ->
+            goToNextLessonButton.text = "Начать \"${lesson.name}\""
+            goToNextLessonButton.setOnMouseClicked {
+                when (lesson) {
+                    is Exam -> closeWindowAndOpenNew<Lesson, TestScreenController>(goToNextLessonButton, lesson)
+                    is Lecture -> closeWindowAndOpenNew<Lecture, LectureController>(goToNextLessonButton, lesson)
+                }
+
+            }
+        }
     }
 
     override fun getTitle(): String = "Тестирование"
@@ -119,8 +136,7 @@ class TestScreenController : BaseController<Lesson>() {
         textAnswerBlock.isVisible = false
 
         wrapUpText.text = "${if (answerIsRight) "П" else "Неп"}равильный ответ"
-        //todo add wrap up text color
-        wrapUpText.style = ""
+        wrapUpText.id = if (answerIsRight) "right" else "wrong"
 
         if (byUser) {
             currentTimeline?.stop()
@@ -145,9 +161,11 @@ class TestScreenController : BaseController<Lesson>() {
     }
 
     private fun endScreen() {
+        wrapUpText.id = if (rightAnswers >= model.test.minimum) "right" else "wrong"
         wrapUpText.text = "Вы${if (rightAnswers < model.test.minimum) " не " else " "}прошли минимальный порог в ${model.test.minimum} баллов\nИтог: $rightAnswers/${model.test.questions.size}"
         LessonsDB.setResultToLesson(model.name, rightAnswers)
         goToMenuButton.isVisible = true
+        goToNextLessonButton.isVisible = rightAnswers >= model.test.minimum && nextLesson != null
         textOfQuestion.isVisible = false
     }
 
@@ -172,10 +190,11 @@ class TestScreenController : BaseController<Lesson>() {
     private fun cleanAll() {
         chooseAnswerButtons.isVisible = false
         textOfQuestion.text = "Тестирование сейчас начнется!"
-        questionsCounter.text = "0/10"
+        questionsCounter.text = "0/0"
         wrapUpText.isVisible = false
         textAnswerBlock.isVisible = false
         goToMenuButton.isVisible = false
+        goToNextLessonButton.isVisible = false
     }
 
 }

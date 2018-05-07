@@ -16,3 +16,11 @@
 #exam {
     -fx-background-color: #db4437;
 }
+
+#right {
+    -fx-text-fill: #0f9058;
+}
+
+#wrong {
+    -fx-text-fill: #db4437;
+}

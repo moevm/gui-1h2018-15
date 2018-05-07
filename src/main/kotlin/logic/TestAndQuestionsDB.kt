@@ -4,6 +4,13 @@ import models.Question
 import models.Test
 
 object TestAndQuestionsDB {
+
+    fun getDemoTest() = Test(listOf(
+            Question(textOfQuestion = "Сколько будет 2+2?", hasVariants = false, rightAnswer = "4"),
+            Question(textOfQuestion = "Назовите столицу России", hasVariants = true, variants = listOf("Москва", "СПБ", "Киев", "Находка", "Дедовичи"), rightAnswer = "Москва"),
+            Question(textOfQuestion = "Назовите столицу Мира", hasVariants = true, variants = listOf("Находка", "Дедовичи"), rightAnswer = "Находка")
+    ), minimum = 1)
+
     fun getTest(): Test = Test(listOf(
             Question(textOfQuestion = "Заклинание боли в Гарри Поттере?", hasVariants = true, variants = listOf("Вингардиум левиОсса", "Вингардиум левиоссА", "ТолькоСиплюсПлюсус"), rightAnswer = "Круциатус"),
             Question(textOfQuestion = "Как звали дворецкого Тони Старка?", hasVariants = true, variants = listOf("Альтрон", "Иван", "Стивен Роджерс"), rightAnswer = "Джарвис"),
